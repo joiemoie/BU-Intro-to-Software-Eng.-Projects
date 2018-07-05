@@ -1,0 +1,9 @@
+there are 10 vehicles
+collision report
+at 10 up2 collided with down1
+at 10 up3 collided with down2
+at 10 up4 collided with down3
+at 10 up5 collided with down4
+the remaining vehicles are
+down5 90 100 0 -10
+up1 0 -100 0 10

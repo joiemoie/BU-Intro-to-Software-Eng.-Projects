@@ -1,0 +1,156 @@
+program = 'w4tttanalyse'
+"""checker for above named program.
+
+Note: the author emails are not validated against the actual student list.
+"""
+TIMEALLOWED = 3
+
+import subprocess
+import hashlib
+import re
+import random
+import itertools
+import logging
+
+Boards= "\n".join(["".join(b) for b in list(itertools.product('xo#',repeat=9))])
+
+# all x,o,t are included
+MapAnswer = {'xx##xoxxo': 'i', 'oooxx##x#': 'o', 'xoxxoo#ox': 'o', 'xxxo#oo#x': 'x', '#o##ox#xx': 'c', 'x#xooox##': 'o', 'o#xox#xox': 'x', '#oxxoxo#x': 'x', 'o#o#xoxxx': 'x', 'ooxxoxxo#': 'o', 'xx##x#ooo': 'o', 'ox#xoxoxx': 'i', 'xooxxo#xo': 'o', 'x#x##xooo': 'o', 'xxxo#o###': 'x', 'x#xoxoxo#': 'x', 'xxxoo#x#o': 'x', 'xxxo#x#oo': 'x', 'ox##o##o#': 'i', 'xox#o##ox': 'o', 'xooo####x': 'i', '#xx##xooo': 'o', '#oxo#oxxx': 'x', 'oxoxxx##o': 'x', 'xo#x#ox##': 'x', 'o#x#x#o##': 'c', '##xoxxxoo': 'x', '#xooo#xxx': 'x', 'xoxoo#x#x': 'c', '##xoxoxxo': 'x', '#o#xxxoox': 'x', 'xooxo#oxx': 'o', '#ox#oxoxx': 'x', 'xxoxooo#x': 'o', 'xxooxox#o': 'o', 'oxoox##xx': 'x', 'xo#ooxxox': 'o', '#ox#ox##x': 'x', 'xoo#x###x': 'x', 'xoox#xxo#': 'x', 'oxxo##ox#': 'o', 'xooxoxox#': 'o', 'oo#x#oxxx': 'x', '####ox#o#': 'i', 'oxo#oxxxo': 'o', 'xxx##o#o#': 'x', 'x#oxx#xoo': 'x', 'x#x#xoxoo': 'x', 'xoxoxo##x': 'x', 'xxoooxo#x': 'o', '#o#oxoxxx': 'x', 'xoxx#oxo#': 'x', '#oxox#xxo': 'x', 'ox#ooxoxx': 'o', 'xooxx##ox': 'x', 'xxoxo#x#o': 'x', '#oxo###o#': 'i', '##oxo#oxx': 'o', 'x##x#oxo#': 'x', 'x#ox#oxox': 'x', 'oxoxx#ox#': 'x', 'o#x#xoxxo': 'x', 'x#x#xooox': 'x', 'x#o#x##ox': 'x', '##x#xxo#o': 'c', '###oxooox': 'i', 'o##xoxx#o': 'o', 'x#xxxoooo': 'o', 'o#x##xo#x': 'x', 'ox#xooxxo': 'o', 'xooxxxxoo': 'x', '#xoxoooxx': 'o', 'xooxx#x#o': 'x', 'ooxxxoxxo': 'x', 'o#xo#x##x': 'x', '#xxxxxxoo': 'i', 'xxooxxoox': 'x', '#xxo#xoox': 'x', 'oxxxxooox': 't', 'x#xoooxox': 'o', 'xoxoooo##': 'i', 'o#oxo#xxx': 'x', 'oox#xox#x': 'x', '#xoxo#o#x': 'o', 'oxo#x#oxx': 'x', 'o#xx#xoox': 'x', 'ox#ox##x#': 'x', '#oox#oxxx': 'x', '#x#ooox#x': 'o', 'xo#ox#oxx': 'x', '#xoxx#xoo': 'c', 'o#o#ooxxx': 'i', 'x#oxoooxx': 'o', 'x#o#x#o#x': 'x', 'x#xxo#xoo': 'x', 'xxoxxo#oo': 'o', 'oxxxox#oo': 'o', 'oxxxo#oxo': 'o', '#oxxx##oo': 'c', 'oxxo#xo##': 'o', '#oxxxxo#o': 'x', 'xoxxo#oox': 'o', 'x#ooxox#x': 'x', 'x#xoooxxo': 'o', 'o#xoxo##x': 'c', 'xxx#o###o': 'x', 'xo##xooxx': 'x', '#xoxxx#oo': 'x', 'ooo#x#x#x': 'o', '#xoxxoxoo': 'o', 'xo#xox#o#': 'o', 'o#xx#o#ox': 'c', 'x###xxo#o': 'c', 'xoxoxox##': 'x', 'ooxxxoxox': 'x', 'x#o#xxoox': 'x', 'x##x##xoo': 'x', 'x#ooxxo#x': 'x', 'xxxox#o#o': 'x', 'xo#oxx##o': 'c', '#xoxx#oxo': 'x', 'xxoxoxxoo': 'x', 'o##xo#xxx': 'i', '#xxoxoox#': 'x', 'x#ooxo#xx': 'x', 'ooo##x#xx': 'o', 'xxoxoo#xo': 'o', 'oox#xxx#o': 'x', '#xoxo#ox#': 'o', 'oxo#o##xx': 'c', '#xxxxoooo': 'o', 'oxo#xxox#': 'x', 'xo##ox#ox': 'o', 'oo#ooooox': 'i', 'oox##x##x': 'x', 'o#xxo##xo': 'o', 'xoxooo#xx': 'o', '##o#oxoxx': 'o', 'xxoxooox#': 'o', 'xx###xooo': 'o', 'x##o#oxxo': 'c', 'oxoxxxoox': 'x', 'xoxoxoxxo': 'x', 'oxoxxxoxo': 'x', 'ooox###xx': 'o', 'xxxooxo##': 'x', 'xxooxooxx': 'x', 'oxxx#ox#o': 'c', 'xoooxxxox': 'x', '#xoxoxoxo': 'o', 'x#oox#xox': 'x', '#x#o#x#ox': 'c', 'xxxo#o#xo': 'x', 'o#xoxox#x': 'x', 'ooxo#xx#x': 'x', 'oox##oxxx': 'x', '#oxxxox#o': 'x', '#xo##oxxo': 'o', '#ox#xxxoo': 'x', '##o#o#xxx': 'x', 'xoxox#xo#': 'x', 'o#x#o#xxo': 'o', 'o#oxxxx#o': 'x', 'xo#oo#xxx': 'x', 'ox#xo##xo': 'o', 'x#o#oxox#': 'o', 'o#xo#oxxx': 'x', '#xoxoxoox': 'o', 'o#xoo#xxx': 'x', 'xxoxoox##': 'x', 'oxx#oo#oo': 'i', '#oxxxxoo#': 'x', 'xoo#x#xox': 'x', '#x##xoox#': 'x', 'o#o#oxxxx': 'x', 'o#x##x#ox': 'x', '#o#xxoxox': 'c', 'oxxox#x#o': 'x', 'xo#ox#xox': 'x', 'o##xooxxx': 'x', 'xooxo#xx#': 'x', 'xxooo#oxx': 'o', '#xxooo#x#': 'o', 'oxooxxo#x': 'o', '##ooxoxxx': 'x', 'o#ox#xxox': 'c', 'xooox##xx': 'x', 'o#xo#xox#': 'o', 'xoxoxxoxo': 't', '#xooxx#xo': 'x', '#ox##xo##': 'c', 'o#x#x#x#o': 'x', '###oo#xxo': 'i', 'xxxo##xoo': 'x', 'xoxxx#ooo': 'o', 'o#oox#xxx': 'x', '#ooxoxxox': 'o', 'oxoxxx#o#': 'x', 'x#oxoxxo#': 'x', '#ooxxx###': 'x', 'oooxoxoo#': 'i', 'x#xx#oxo#': 'i', 'oo#x#ox#x': 'c', '#xxxoxoo#': 'c', 'xxxxoo##o': 'x', 'oxo#xx#xx': 'i', 'o##xxxxoo': 'x', '#xxoooxxx': 'i', 'o##xx#xxx': 'i', '#ox#oxxo#': 'o', 'x#xoxo#ox': 'x', 'ox##oxx#o': 'o', 'ox#xoxxoo': 'o', 'oo#ox#xxx': 'x', 'xoooxx##x': 'x', 'ox##xooxx': 'x', '#oxoo#xxx': 'x', '#xx#o#ooo': 'i', '##x##xoox': 'x', '#ooxxx#ox': 'x', 'xxxoxooxo': 'x', 'o#o#xxoxo': 'i', 'o###o#xxx': 'x', '#o##o#xxx': 'x', 'xxoxooxox': 'x', 'oxo#o#x##': 'i', '#o#xooxxx': 'x', 'xo#xxx#oo': 'x', '##oxxxxoo': 'x', 'xxox#o###': 'c', '##oooxxxx': 'x', '##xoxoxox': 'x', 'ooox#xxxo': 'o', 'oooxox#xx': 'o', '##oxxxo##': 'x', 'oxx#xoox#': 'x', '#xx#xoxoo': 'x', 'xoxoox##x': 'x', 'oo#o#xxxx': 'x', 'o#oo#xxxx': 'x', 'xox#x#oox': 'x', '##xxx#ooo': 'o', 'xox#xo#ox': 'x', 'xo#xxo###': 'c', 'xx#xooxo#': 'x', 'o#xxox##o': 'o', 'o#oxooo#o': 'i', 'x#o#ox#ox': 'c', 'oxxo#xoxo': 'o', '#xo#oxo#x': 'o', '##xx#xooo': 'o', 'x#oxoxoxo': 'o', 'xxx###o#o': 'x', 'x#xooooxx': 'o', '#oxox#x##': 'x', '#o#x#o#xx': 'c', 'xoxo#xo#x': 'x', 'ooxx#xo#x': 'x', 'xxooxxoxo': 'x', 'o#xxxxoo#': 'x', '#oxxo#xo#': 'o', '#oxxo#x#o': 'c', 'oox#x#xxo': 'x', 'oxoxoxxox': 't', 'x#o#xoxox': 'x', 'xxo####o#': 'c', '#xo#xo#x#': 'x', '##oo##xxx': 'x', 'xo#xx#xx#': 'i', 'ooxxxx#o#': 'x', 'o#oxxxxo#': 'x', 'xoo#xox#x': 'x', 'x##oxx#o#': 'c', '#xoo#ooo#': 'i', 'xxoox#o#x': 'x', 'oo#xxxox#': 'x', 'xo#xxoxo#': 'x', 'oo#xxoxxx': 'i', 'xo##oxxxo': 'c', 'ooxxxxoox': 'x', '#xo#x##xo': 'x', 'xx##xooxo': 'x', '##xo#x#ox': 'x', 'oooxx#oxx': 'o', 'xxxo##oox': 'x', 'oxxoxoo#x': 'o', '#ox##x#ox': 'x', 'oxoxxooxx': 'x', '##oxxx##o': 'x', 'x#ox##x#o': 'x', 'ox#o#xo#x': 'o', 'oxxo#ooxx': 'o', '#xx#x#ooo': 'o', 'oxxox#xo#': 'x', 'o#xxoxxoo': 'o', 'xxoo##oxx': 'c', 'xo#o#oxxx': 'x', 'xo#xoxx#o': 'x', 'o##ooxxxx': 'x', 'oxxxo#xoo': 'o', 'x#xx##ooo': 'o', 'xoxxo#x#o': 'x', 'xo#ox###x': 'x', 'xxx#oox#o': 'x', 'ooxo##xxx': 'x', 'x#oxo#o#x': 'o', 'o##oxoxxx': 'x', 'xxo#xo##o': 'o', '#o##oxxox': 'o', 'oooxoxxx#': 'o', 'oxxxoxoox': 'x', '#xo#oxox#': 'o', '##oxoxox#': 'o', 'xo#oxo#xx': 'x', 'x#oxxx#oo': 'x', 'ooox#x##x': 'o', '#oxxxoxox': 'i', '#xx#oxoox': 'x', 'oxx#oxxoo': 'o', 'xxx#oo##x': 'i', '##xox#x#o': 'x', '#oo###xxx': 'x', 'xox#xoxo#': 'x', '#x#x#xooo': 'o', 'xxxxo#o#o': 'x', 'xo#xo#x##': 'x', 'xx#xoox#x': 'i', 'oxoxoxox#': 'o', 'xoxo#x#o#': 'c', '###xooxox': 'c', '#x#oxoxox': 'c', 'xxx#o#oox': 'x', 'oo#xoxxxo': 'o', '#oxoox#xx': 'x', 'xo#x#oxox': 'x', 'xxo#o#ox#': 'o', 'oxoo##xxx': 'x', 'ox##ox#x#': 'c', 'xoox#ox#x': 'x', 'ooo#xx#x#': 'o', '#ox#xoxxo': 'x', 'oxoxox#xo': 'o', 'xxo#xxooo': 'o', 'o#x#oxx#o': 'o', 'ooxox#x#x': 'x', 'xxxxo#oo#': 'x', '##x#x#xoo': 'x', 'xoxoxooxx': 'x', 'ox#oxoxx#': 'x', '##xoooxo#': 'i', 'oox#xoxx#': 'x', 'xxooxoxox': 'x', 'ooo#x#xx#': 'o', '#xoxxxo#o': 'x', '##xooxxox': 'x', '#oxooxx#x': 'x', 'ooxxxox##': 'x', '#ooxxxxo#': 'x', 'oo#xxx#xo': 'x', 'oo#xo#xxx': 'x', 'xxxxooo##': 'x', 'oxx##xoo#': 'c', 'ooxoxxx##': 'x', 'xo#oxox#x': 'x', 'oxx#xox#o': 'x', 'xooxxxoox': 'x', 'x#o#oxo#x': 'o', 'o#o###xxx': 'x', '#xoxxo##o': 'o', 'ooo#xxxxo': 'o', '#ox#x#x#o': 'x', '#xxoxo#ox': 'c', 'x#o#xxxoo': 'c', 'xo##xoxox': 'x', 'oxx#xoxo#': 'x', 'oox#o#xxx': 'x', 'ooxxxooxx': 't', 'xxxox#oo#': 'x', '#ooxxxox#': 'x', 'ooxoxxxxo': 'x', 'o#xxooxxo': 'o', 'x#xoxoo#x': 'x', 'x#x#oxoox': 'x', 'x##xo#xo#': 'x', '#oo#xoooo': 'i', 'xxxo####o': 'x', 'o#ox##x#o': 'i', '#oxoxox#x': 'x', '#xoooxxox': 'c', '#xxooox##': 'o', '#xo#xooxx': 'x', 'xo###ooxx': 'c', 'o#oxxx#ox': 'x', 'o##o##xxx': 'x', 'oxoxo#xxo': 'o', '#xxxoxooo': 'o', '##xoxxoox': 'x', 'oxxoox##x': 'x', 'oxoxxox#o': 'o', '##oo#xxox': 'c', 'oxx#ox##o': 'o', 'x#xox#oox': 'x', 'x#oxxoxo#': 'x', 'o#oxxxox#': 'x', 'xxxoxoxoo': 'x', 'x#o#xo#xo': 'o', 'xxx#xooo#': 'x', '#oxxxoxo#': 'x', 'xxx#oxo#o': 'x', '#xoooxoxx': 'o', 'x#xoxxooo': 'o', 'oox#ox#xx': 'x', 'xxo##ox#o': 'o', 'ox#xxxo#o': 'x', 'oxooxxxxo': 'x', 'oxox#oxxo': 'o', 'xxo#o#o#x': 'o', 'o#xxxxo##': 'i', 'xxxoxo#o#': 'x', 'xxo#x#oox': 'x', '##xxoxoox': 'x', '#ox#x#xo#': 'x', 'x#xx#oxoo': 'x', 'ox##ooxxx': 'x', 'o#x#ooxxx': 'x', 'xoxoooxx#': 'o', '##o#x#x##': 'c', 'xx#oxo#xo': 'x', 'x#oxo#xxo': 'x', 'x##xo#x#o': 'x', 'ox#oxxoox': 'o', '#xxoooxox': 'o', '##oxoxo#x': 'o', 'oxxxoxo#o': 'o', 'xxoxoxoo#': 'o', 'xxxoo##ox': 'x', 'ox#ooxxxo': 'o', '#ooxxxx#o': 'x', '##x#oooxx': 'c', '##oxxxoxo': 'x', 'oxx##xoox': 'x', '#x#xx#xoo': 'i', 'o#oox####': 'i', 'xxxooxoxo': 'x', 'xxx###oo#': 'x', '#oxxoxxoo': 'o', 'ooxxo#xxo': 'o', 'oo#x##oo#': 'i', '##ox#oxxo': 'o', 'oxx#x#oxo': 'x', 'o#xxoxo#x': 'x', 'ooo#xx##x': 'o', 'xox#ooxox': 'o', 'xxox#ooxo': 'o', 'xo##xxoxo': 'c', 'xooo##xxx': 'x', 'xooxxxoxo': 'x', 'o##xo#xxo': 'o', 'xxoxo#o##': 'o', 'xxxo#xo#o': 'x', 'o#x#oxxox': 'x', '###xxx#oo': 'x', 'ox##xoxxo': 'x', 'o###oxxxo': 'o', '#oxoxxo#x': 'x', 'xxx#o#oxo': 'x', 'oo####xxx': 'x', 'ooox##xx#': 'o', 'oxxoo#xxo': 'o', '####ooxxx': 'x', '##xooxoxx': 'x', '##o#xoox#': 'i', 'xxx#oo#ox': 'x', 'xxox#xooo': 'o', 'xxoooxxox': 't', '#xoox#oxx': 'x', 'xo#oxx#ox': 'x', 'xox#o#xo#': 'o', 'xxxoxo##o': 'x', 'oxoxxxxoo': 'x', '#xo#ooxxx': 'x', 'xo##x##ox': 'x', 'xoox##xox': 'x', 'xooxoxxxo': 'x', '###o#oxxx': 'x', 'o##o#xoxx': 'o', 'oxxoxxoo#': 'o', 'x#xoox#ox': 'x', '#oxx#xoox': 'x', 'o#xoxo###': 'i', 'x#xooxo#x': 'x', 'xo#x##xo#': 'x', 'x#o#o#oxx': 'o', 'xxoxo#oox': 'o', 'xoxoxoxox': 'x', 'xx#ooo#x#': 'o', 'xxo###xxo': 'i', '##ox###x#': 'c', 'xx#oxo#ox': 'x', 'oxxoxoxox': 'x', '#xxoxxxox': 'i', 'ooxxxxxoo': 'x', 'x#oo#oxxx': 'x', 'xxo#xoox#': 'x', 'xoox#oxx#': 'x', 'oxxxxooxo': 'x', 'ox#xxoox#': 'x', '#o#xxxo##': 'x', '#xxooooxx': 'o', 'o#xo#xxox': 'x', '#oxxooxox': 'o', 'xxoooxox#': 'o', 'ooox#xxox': 'o', '#o#o##xxx': 'x', 'ooxox#oxx': 'o', 'x#ox#xxoo': 'x', '#xxooxo#x': 'x', 'o#xoxxxo#': 'x', 'xo##oxxo#': 'o', 'xxxx#oo#o': 'x', 'xxoooox#x': 'o', 'xxxo#o#ox': 'x', '##x#xxooo': 'o', 'xo#o#oooo': 'i', 'o#xxxoxo#': 'x', 'xooxxx#o#': 'x', '#oxoxoxx#': 'x', 'ox##xxoxo': 'x', 'o#oxxx###': 'x', 'xxx##ooxo': 'x', 'xo#x##x#o': 'x', 'oo#oxxoxx': 'o', 'ooxxoxx#o': 'o', '#xxoox#ox': 'x', 'x#oooxoxx': 'o', '#xxxooxo#': 'c', 'oxxxoox#o': 'o', '#xoox#xxo': 'x', 'xo##ooxxx': 'x', 'oooxxoxx#': 'o', '#ox#ooxxx': 'x', 'xo#xo###x': 'c', 'ox#xxxoo#': 'x', '#ooxxx#xo': 'x', 'ooxoxxox#': 'o', 'xoxx##xoo': 'x', '#oxoxxx#o': 'x', 'oo#xxx#ox': 'x', '#xxo#ox#x': 'i', 'x#xooo#x#': 'o', 'xo#xxo#ox': 'x', 'ox#oxxo##': 'o', 'o#ox#oxxx': 'x', 'oxx#o#x#o': 'o', '#xoox##x#': 'x', 'ox#oo#xxx': 'x', 'oxo#xoxx#': 'x', '#x#ox##xo': 'x', '###xxxoo#': 'x', '#o#xxxoxo': 'x', 'xx#xoxooo': 'o', 'xxx#xo#oo': 'x', 'x##xxooox': 'x', 'ox#xx#oxo': 'x', '#ox##xxoo': 'c', 'oooxx###x': 'o', 'o#xx##x#o': 'c', 'o#xoxooxx': 'o', 'oxooxoxxx': 'x', 'xoxxoooxx': 't', 'o##ox#oxx': 'o', 'o#xoxxo##': 'o', 'o#oxoxxxo': 'o', 'xo#xoxoox': 'o', '##x#oxo#x': 'x', '#xo#xxoxo': 'x', 'o####oxxx': 'x', 'xx#oooxox': 'o', '#x#oxo#x#': 'x', 'xxxoo##xo': 'x', 'x#oxx#oox': 'x', 'oxxo##o#x': 'o', 'xx#oooxxo': 'o', 'o#xxo#x#o': 'o', 'xxoo#oxxo': 'o', 'xxxoxxx#x': 'i', '#x#xxooxo': 'x', 'oxooox#oo': 'i', 'xxxo##o##': 'x', '#ooo#xxxx': 'x', '#xxoxo#xo': 'x', 'xxxoo####': 'x', 'xxx#oo#xo': 'x', '#xo##xx#o': 'c', 'oxoxo#oxx': 'o', 'x#ox##xo#': 'x', 'xx#x#oxoo': 'x', 'o#x#xoxox': 'x', 'x##xooxxo': 'x', 'o#xooxxxo': 'o', '##o#xx#o#': 'c', 'x#x#x#ooo': 'o', '##ooox###': 'i', '###xxxo#o': 'x', 'xx#xxo##o': 'i', 'x##x#ooxx': 'i', 'oxxxo###o': 'o', 'oxxox#oox': 'o', 'xxox##xo#': 'i', '#xxox#xoo': 'x', 'xxo#ooxxo': 'o', '#xo#xox#o': 'o', 'oox#oxx#x': 'x', 'xoxxxooxo': 't', 'xx##xooox': 'x', 'o##xxxoxo': 'x', '#x##xo#xo': 'x', 'xo#xx#xoo': 'x', 'x#oxxo##o': 'o', 'oxxx#o#ox': 'c', 'o#xoxxoxo': 'o', 'x##x#xooo': 'o', 'o#ox###x#': 'c', 'o#x#x#xo#': 'x', 'xoxox#o#x': 'x', 'oooo#ooxx': 'i', 'o###o##o#': 'i', 'xoxoxxxoo': 'x', 'ox#ox####': 'c', 'xoo##oxxx': 'x', 'x#oxoox#x': 'x', 'o#xoxxxoo': 'i', 'xxoox#ox#': 'x', '#oxoxxxo#': 'x', '#o##oxo##': 'i', '#o#ooxxxx': 'x', '#xoo#xox#': 'c', 'xo#oxxo#x': 'x', 'oxo#o#xxx': 'x', 'xxx#ooxo#': 'x', '#ooxxxo#x': 'x', 'oox#xx#ox': 'x', '#xxoxox##': 'i', 'o#oxoooxo': 'i', 'xoxooxxxo': 't', 'xx#oxoooo': 'i', 'x#oxoxo##': 'o', 'xxx##oxoo': 'x', 'x#xoxox#o': 'x', 'o##oxxo#x': 'o', 'xooox#x#x': 'x', 'ox##o#xxo': 'o', 'xxxooxxoo': 'x', '#o###oo#o': 'i', 'xxxxoo#o#': 'x', 'xxx#o#xoo': 'x', 'xxxooxoox': 'x', 'ooxxxxo##': 'x', 'oxxooxox#': 'o', 'oxxooo#xx': 'o', '##xoox##x': 'x', 'o#xxoxoxo': 'o', 'xx#xxoooo': 'o', 'xooxxooxx': 'x', 'xox#oxo#x': 'x', 'x###x#oox': 'x', 'xx#ooox##': 'o', 'x#oox###x': 'x', 'ooxxooxxx': 'x', 'oox#oxxxo': 'o', 'xo#xx#oox': 'x', 'x#ooxox##': 'c', 'x#oxxoo#x': 'x', 'o#xxxox#o': 'x', 'oxxoxxo#o': 'o', 'oxo#o#o##': 'i', 'ooo#xxxox': 'o', 'x##ooox#x': 'o', 'oxxxooxox': 't', '#ox##xo#x': 'x', 'oxo#x##x#': 'x', '#x#ooo#xx': 'o', 'xooxoxo#x': 'o', 'xxx#oo###': 'x', '###xoxox#': 'c', 'o#xxox#ox': 'x', 'oxxox#o##': 'o', 'xx#oxxooo': 'o', 'xooxxx##o': 'x', 'xxo#oooxx': 'o', 'oxo#xx#xo': 'x', 'xo##oo#xo': 'i', 'oox##xxox': 'x', 'xxoxo#oxo': 'o', 'oox##xx#o': 'c', 'oox##xox#': 'c', 'ox#oxx#xo': 'x', '#oooo#ox#': 'i', 'oxoo#xoxx': 'o', '##xo#xo#x': 'x', 'xoxoxxoox': 'x', '#oxoxxxxo': 'i', 'xoxox#o#o': 'i', 'o##x###x#': 'c', 'ox#o##oxx': 'o', 'o#oxx#xxo': 'c', 'o#xox#x##': 'x', 'xxox##xoo': 'x', 'xxxoo#xo#': 'x', 'xoxxoxoxo': 't', 'x#oox#oxx': 'x', 'oxx#o##xo': 'o', '#xxoxoxo#': 'x', 'xox#ox#o#': 'o', 'ox#xoxoxo': 'o', 'oxo#x#xxo': 'x', 'ooxo###o#': 'i', 'ooxoxoxxx': 'x', 'xo##xxoox': 'x', 'x##xoxxoo': 'x', 'xxxox##oo': 'x', 'oxxxooo#x': 'c', 'xox##ox##': 'c', 'ooo#xxoxx': 'o', 'oxoxoxo#x': 'o', 'xo##xo#xo': 'c', '#oxxxxo#x': 'i', 'o#xoxx#ox': 'x', 'xoxooxoxx': 'x', 'oox#x#xox': 'x', 'xxxxooxoo': 'x', 'oooxx#x##': 'o', 'xxoxxoo#o': 'o', '#oxoo#oo#': 'i', 'x###xo#ox': 'x', 'ooooxx#xx': 'o', '#xoxxxoo#': 'x', 'xx#ox#oox': 'x', 'xooxxxo##': 'x', 'o##xxx##o': 'x', 'o##xxxoox': 'x', '#xxoxxooo': 'o', 'ooooxxxx#': 'o', 'xxox#oxo#': 'x', '#o#xxx##o': 'x', 'o##o##xx#': 'c', 'xxx#xoo#o': 'x', 'oo#xoxxox': 'o', 'xoo#x#oxx': 'x', 'xxxo#oox#': 'x', '#oxo#xoxx': 'x', 'x####oo#x': 'c', '#ooox#xxx': 'x', 'ooox#ox##': 'i', 'xxxxoooxo': 'x', 'oo##x#x#x': 'c', 'oxoox#xx#': 'x', 'x#ooo#xxx': 'x', '#oo#oxxxx': 'x', 'xo##oxo#x': 'c', '#xxooo##x': 'o', 'xo#xxxo#o': 'x', '#oxox#xox': 'x', 'o#xox#o#x': 'o', 'xooxxxoxx': 'i', 'oxx#xo#xo': 'x', 'xoo#oxxox': 'o', 'x#oxxooxo': 'o', 'ox#ox#xxo': 'x', '#ox#o#xox': 'o', 'x#xox#xoo': 'x', 'o#xo##oxx': 'o', 'ooox#xoxx': 'o', 'x#o##oxxo': 'o', '#xx#xooxo': 'x', 'xxx##o##o': 'x', 'xxx##oo##': 'x', '##xoooxx#': 'o', 'xo#xoox#x': 'x', 'xoxoo#xox': 'o', '###oo#xxx': 'x', 'oxoxxo#x#': 'x', 'x##oxooxx': 'x', '#x#ox#ox#': 'x', 'xxoooxxxo': 't', 'xooxox#ox': 'o', 'ooooxxx#x': 'o', 'o#xoox#xx': 'x', 'xooxooxxx': 'x', 'xoxxxooox': 'x', 'xxooxo##x': 'x', '##xxxoxoo': 'x', 'ox#ox#o#x': 'o', '#xoo#oxxx': 'x', '####o#xx#': 'c', 'xox#xox#o': 'x', 'xooxx#xo#': 'x', 'ooxxoxoxx': 'x', 'oxxooox#x': 'o', '#x#oxxoxo': 'x', 'xxx#ooox#': 'x', 'xoo#o#xxx': 'x', 'oo#xox#ox': 'i', 'x##ox#o#x': 'x', 'oxxoxoxxo': 'x', 'xxooox#x#': 'c', 'oxx#ooxxo': 'o', 'x#o###ox#': 'c', 'xxox#o##o': 'o', 'oooxxxxox': 'i', 'oxx#x#xoo': 'x', '#xo#x#ox#': 'x', '#x#xx#ooo': 'o', 'oxo#xx###': 'c', 'xoxox#x#o': 'x', 'oxxo#xxo#': 'c', 'o##xox#xo': 'o', 'xooxxox##': 'x', '#x#oxooxx': 'x', '#o#xo#xox': 'o', 'xx###xx#x': 'i', 'oxxoxxxoo': 'x', 'xo#xxoo#x': 'x', '###xoooox': 'i', 'xoooxxoxx': 'x', 'x#oo#o#ox': 'i', 'xxxo#ox#o': 'x', 'xxoooo#xx': 'o', 'xo#oo##ox': 'i', 'o#oxxoxxo': 'o', '#xxx##ooo': 'o', 'o#oxoxoxx': 'o', '#ooxxoxxo': 'o', 'xxxx#o#oo': 'x', 'x#ooxoxxo': 'o', '#oxxx#xoo': 'x', 'oxxox##xo': 'x', '#xox#o#xo': 'o', 'xooooxxxx': 'x', 'xoo#xx#ox': 'x', 'ooxox#xx#': 'x', 'ooxoxxxox': 'x', 'xxo#xoo#x': 'x', '#x##xxooo': 'o', '#xoxoxo##': 'o', 'o#xox#xxo': 'x', 'oooxxox#x': 'o', 'xxooooxx#': 'o', 'oox#xxxo#': 'x', 'oxox#xo##': 'c', 'xxoxoxo#o': 'o', 'x#o#xooxx': 'x', 'o#x#ox#xo': 'o', 'xxoxx#ooo': 'o', 'ox#xox##o': 'o', 'o##xxx#o#': 'x', 'xoox#xx#o': 'x', 'xoooxxxxo': 't', '#xxoxox#o': 'x', 'xxxoxooox': 'x', 'oo#xxxx#o': 'x', 'xo#oxoxxo': 'c', 'ooxoxx##x': 'x', 'xooxxoxox': 'x', 'xoxox##ox': 'x', 'x###o#xo#': 'c', 'o#xoxxx#o': 'x', '###o###oo': 'i', '#x#oxoxxo': 'x', '##oxxxoox': 'x', 'o#oxxx#xo': 'x', 'xx#x#xx##': 'i', 'ox#oxo#xx': 'x', 'xo#oxxxo#': 'c', 'x#ox#ox##': 'x', 'o#xxx#xoo': 'x', 'oxxxx#ooo': 'o', 'ox#o#xox#': 'o', 'xox#x#xoo': 'x', '##x#xoxo#': 'x', 'xoo#xxo#x': 'x', 'xx#x##ooo': 'o', '#ox#xox##': 'x', 'oxooxx#x#': 'x', 'oxx#ox#ox': 'x', '#x##x#oxo': 'x', 'o#ooxxoxx': 'o', 'oo##xoxxx': 'x', 'xxx####oo': 'x', 'x#xxoxooo': 'o', 'oox#xxo#x': 'x', '#oxo#xxox': 'x', '#oxo#x##x': 'x', 'xx#oxoox#': 'x', '#o#xxxxoo': 'x', '#xo#xx##x': 'i', 'oox##xoxx': 'x', 'x##xoox##': 'x', 'ooo#xxx##': 'o', 'x##o##o#x': 'c', 'xox#oxxoo': 'o', 'x##oxoxox': 'x', 'xoxxooxxo': 'x', 'x#oxxxoo#': 'x', 'x##x#ox#o': 'x', 'ooxxx#xo#': 'x', '#x#oxxxoo': 'c', 'xoxx#ox#o': 'x', 'o#x#oxxo#': 'c', 'ooo#x##xx': 'o', 'oxooxxxox': 't', 'x#o###oox': 'i', 'oxoooxxxx': 'x', 'xo#xooxx#': 'x', 'oxo#xo#xx': 'x', 'ox##ox#xo': 'o', 'xx#xo#xoo': 'x', 'xooxx#o#x': 'x', 'x#o#xox#o': 'o', 'ooox##x#x': 'o', 'x#oxoxx#o': 'x', '#x#x##o##': 'c', 'xxxo###o#': 'x', '#xox#ox#o': 'o', 'xo##x#o#x': 'x', 'xo#xo#xxo': 'x', 'xxxoxoo##': 'x', 'xoo####x#': 'c', '#o#xxx#o#': 'x', '##xooo#xx': 'o', '##oxxo#xo': 'o', 'xxo#oxo##': 'o', 'x#xxoox#o': 'x', 'xxo#xoxoo': 'o', 'x#oxo#x##': 'x', 'ox#o#oxxx': 'x', '#xooxo#xx': 'x', '###o#####': 'i', 'xxxoox##o': 'x', 'xoxxoxoo#': 'o', 'xo#xxox#o': 'x', 'x##oooxx#': 'o', 'o##oxooox': 'i', 'xxxoox#o#': 'x', 'x##ox##ox': 'x', 'x#oxooxx#': 'x', 'oxoxx##xo': 'x', 'oo####x#o': 'i', 'x#xooo##x': 'o', 'xox#xxooo': 'o', '##x#ox#ox': 'x', '#ox#xoxox': 'x', 'x#oxoxoox': 'o', 'x##ooo#xx': 'o', 'x#xo##o##': 'c', 'oo##oxxxx': 'x', 'xxxxoooox': 'x', 'xoox##xxo': 'x', 'oxoxoxx#o': 'o', 'xoxxo##o#': 'o', 'ooxx#x#ox': 'x', 'oooxxo#xx': 'o', 'xxxxo##oo': 'x', 'xx#oxoo#x': 'x', '#x#x##xoo': 'c', 'oooxx#xox': 'o', '#xooxxox#': 'x', '#xoxooxxo': 'o', '##oxxx#o#': 'x', 'oxxx#xooo': 'o', 'xxxx#oxo#': 'i', 'x##xoxoo#': 'c', 'x#oxo#xox': 'x', 'xxooxo#x#': 'x', 'oooxx#xxo': 'o', 'oxxoox#xo': 'o', 'oxxo#x#ox': 'x', 'x##oxxoox': 'x', 'ooxooxxxx': 'x', 'o#xox#ox#': 'o', 'oo#xxxo#x': 'x', 'o#xoxoxx#': 'x', '#x#oox#x#': 'c', 'xoxxoox##': 'x', '#oxxo##ox': 'o', 'xoo#xo#xx': 'x', 'o#oxxxo#x': 'x', '#oox#oxoo': 'i', 'xox#xoo#x': 'x', 'o#oo####x': 'i', 'oxx#xxooo': 'o', 'xxx#o##o#': 'x', 'xoo#oo#o#': 'i', 'oxo#oxoxx': 'o', 'xoxxox#oo': 'o', 'xxo#oxoxo': 'o', 'x#xxooxo#': 'x', '#o###oxxx': 'x', 'oxoxxoxox': 't', 'oxxxoo#xo': 'o', 'o##oxxox#': 'o', 'xxo#oxoox': 'o', '##x#xox#o': 'x', 'xxoxxooox': 'x', '#o#xox#ox': 'o', '##o##oxxx': 'x', '#o##oooox': 'i', 'xxooxxxoo': 't', 'xoxxxo#oo': 'c', 'x#oxo#ox#': 'o', 'xoxxxoxoo': 'x', 'ooox#x#x#': 'o', 'xxx#ox#oo': 'x', 'xxoxo#xo#': 'x', 'xxoxxoxox': 'i', 'x###xxooo': 'o', '#xoxxoox#': 'x', 'ooxxox##x': 'x', '##xox#xo#': 'x', 'x#xo#xoox': 'x', 'ooo##xx#x': 'o', 'xo##xo##x': 'x', 'o#xxxxo#o': 'x', '#ooxoxoxx': 'o', '#oxxxx#oo': 'x', 'oox#x#x##': 'x', '##oxooxxx': 'x', 'ox##xo#x#': 'x', '##o#xoxxo': 'o', 'x##xooxox': 'x', 'xoo#ooxx#': 'i', 'o#x#xox##': 'x', 'ooxo#xxx#': 'c', 'xxx#o#o##': 'x', '#oooooooo': 'i', 'ox#xxo#xo': 'x', 'xoxo#x#ox': 'x', 'xooxo#x#x': 'x', 'o#x#oxoxx': 'x', 'x#xoox###': 'c', 'oxx#oxo#x': 'x', 'ooo##xxx#': 'o', 'oxxoxox##': 'x', 'xoxx#xooo': 'o', 'xxo##o#xo': 'o', 'ox#x#oooo': 'i', 'xooxxo##x': 'x', 'x##oxo##x': 'x', 'xxxo##oxo': 'x', 'oxoxxxo##': 'x', 'x#o#ooxxx': 'x', 'oox#xoooo': 'i', '##xx#o#xo': 'c', 'xoooxoxxx': 'x', '#oxxox#o#': 'o', 'o#oxox##x': 'c', 'xxxo#oxo#': 'x', 'x#oxxo#ox': 'x', 'xo#x#oxxo': 'x', 'x##xx#ooo': 'o', 'x#o#xo##x': 'x', 'xo#xo##ox': 'o', 'xo#x#xxoo': 'x', 'oxo##oxxx': 'x', 'oooooox#x': 'i', 'o#oxx#ox#': 'c', 'oo#o#xx#o': 'i', 'oo#x#x###': 'c', 'oxoxooxxx': 'x', 'o#x#ox##x': 'x', 'xoxooxxo#': 'o', 'oo#xxx###': 'x', 'xxoox##xo': 'x', '#x##xoo#x': 'c', 'xoo#xoxxo': 'o', 'xoo#oxoxx': 'o', 'o#ooxxxxo': 'c', 'ooox#xx##': 'o', '#xo#o#oxx': 'o', 'oxxooxxox': 'x', 'ox#xox#oo': 'i', 'xxxoo#o#x': 'x', '#oxoxxox#': 'c', 'ox#xo#x#o': 'o', '#xxxooxx#': 'i', 'ooxx#x##x': 'i', '#oo#xoxxx': 'x', 'xoox##x##': 'x', 'ooxxo#xox': 'o', 'xoo###oxo': 'i', 'xxo#xo#ox': 'x', 'xxx#oxoo#': 'x', '#oxoxx#ox': 'x', 'x#ox#o#xo': 'o', '#xooxoxx#': 'x', 'x###xoo#x': 'x', '#ooxo#xxx': 'x', 'x#ooxxoo#': 'i', 'oxxoxo#x#': 'x', 'x#ooxx#ox': 'x', 'o#xxxx#oo': 'x', 'ox#xxx#oo': 'x', 'xox##xoox': 'x', 'xo##o#xox': 'o', 'oxoooo##x': 'i', 'xxxx#ooo#': 'x', 'o#o##oxox': 'i', 'ooxxox#xo': 'o', 'xxxo#xoo#': 'x', '#ox#xxoox': 'x', '##xooox#x': 'o', 'xxoox##ox': 'x', 'o#x#xxxoo': 'x', 'xxo#x#oxo': 'x', 'ooxxxxoxo': 'x', 'o#xooxx#x': 'x', 'xooxoxx##': 'x', 'xxx##ooox': 'x', '#x#oooxx#': 'o', 'oxxoooxx#': 'o', 'oxxooxx#o': 'o', 'xx#ooooxx': 'o', 'x##xoxo#x': 'i', 'x##oooox#': 'i', 'xo#xxxoo#': 'x', '#xxox#oxo': 'x', 'oxxoo#oxx': 'o', '##oxxox#o': 'o', 'oox##oxx#': 'c', 'xx#ooo##x': 'o', 'xoxooox#x': 'o', '#xxxooo##': 'c', '##xoxox##': 'x', 'oxxxoooxx': 't', 'ox##x##xo': 'x', 'oo#xxxxo#': 'x', 'o#xx##oox': 'c', 'oxxxxoxoo': 'x', 'x#oxxxo#o': 'x', 'xxxoo#ox#': 'x', 'xx#xoox#o': 'x', '#xo##o##x': 'c', 'ooxxxx##o': 'x', 'xox#ox###': 'c', 'ooxxx##xo': 'c', 'ox##x#ox#': 'x', 'xxx#ooo#x': 'x', 'ooxxx#x#o': 'x', 'x##xxoxoo': 'x', 'ooxo#x#xx': 'x', '#xxoooxxo': 'o', 'xx#ox#oxo': 'x', 'oxx#oxoxo': 'o', '#o#xoxxo#': 'o', '#o###xx#o': 'c', 'o##xxxo##': 'x', 'oooxoxx#x': 'o', 'o#x#xxoox': 'x'}
+
+program_name = program+'.cpp'
+
+orig_program = program_name
+
+def get_includes(file_contents):
+    IncludeList=[]
+    for line in file_contents.lower().splitlines():
+        if "include" in line:
+            m = re.match("\s?#\s?include\s?(<\w+>).*",line)
+            if m and m.groups():
+                IncludeList.append(m.groups()[0])
+    return IncludeList
+
+def get_authors(file_contents):
+    Authors = []
+    findstr = "// copyright"
+
+    for line in file_contents.lower().splitlines():
+        if line.startswith(findstr):
+            try:
+                _, email = line.rsplit(" ", 1)
+                if email.endswith('@bu.edu'):
+                    Authors.append(email)
+            except:
+                pass
+    return Authors
+
+def check_program():
+    """return any errors as a list of strings"""
+    try:
+        boards_file = open('tictactoeboards.txt','w')
+        boards_file.write(Boards)
+        boards_file.close()
+
+        R = subprocess.run(['./'+program],timeout=TIMEALLOWED)
+        txt = open("tttstatus.txt").read()
+        h = hashlib.sha256()
+        h.update(txt.encode())
+        summary = h.hexdigest()     
+        if summary == 'c7db9a100bea3d7592d84adc8b5d7c70ad13cd17d2d427449332af128d9b69cf':
+            return []
+        errors=[]
+
+        Allanswers=txt.splitlines()
+        if len(Allanswers) != 3**9:
+            errors.append('Not enough responses were produced by your program.')
+        for line in Allanswers:
+            board,ans = line.split()
+            if board in MapAnswer and MapAnswer[board] != ans:
+                errors.append("{} is not {}, it is {}".format(board,ans,MapAnswer[board]))
+            elif board not in MapAnswer and ans in 'xot':
+                errors.append("{} is not {}, it is either i or c".format(board,ans))
+
+        if not errors:
+            errors=['All xot are correct, but some i and c are switched. I dont know which ones.']
+
+        if len(errors)>100:
+            errors=errors[:100]
+            errors.append('...list truncated...only reporting the first 100 errors.')
+        return errors
+
+    except subprocess.TimeoutExpired:
+        return ['Program did not complete in the time allocated ({} seconds).'.format(TIMEALLOWED)]
+    except Exception as e:
+        logging.warning('check crash:'+str(type(e))+str(e))
+        return ['Program caused checker to crash with error {}'.format(e)]
+
+
+def main():
+    s = 'Checking {} for EC327 submission.\n'.format(orig_program)
+    try:
+        the_program = open(program_name).read()
+    except:
+        s += 'The program {} does not exist here.\n'.format(orig_program)
+        return 'No file',s
+
+    s += '\n---- author check ----\n'
+    authors = get_authors(the_program)
+    s += 'The authors are: {}\n'.format(" ".join(authors))
+
+    s += '\n---- style check ----\n'
+
+    P_astyle = subprocess.run(['astyle','--formatted','--dry-run',
+           '--style=google','--indent=spaces=2',program_name],
+           stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    if P_astyle.returncode:
+        s += 'astyle returned an error: {}'.format(P_astyle.stderr.decode())
+
+    if P_astyle.stdout.decode().startswith('Formatted'):
+        s +='astyle made changes, please use "astyle --style=google --indent=spaces=2" before submitting\n'
+        astyle_error = True
+    else:
+        astyle_error = False
+
+    P_lint = subprocess.run(['cpplint','--filter=-readability/alt_tokens',program_name], stderr=subprocess.PIPE)
+    if P_lint.returncode:
+        s += 'cpplint found problems, as follows:\n'
+        s += P_lint.stderr.decode()+"\n"
+    else:
+        s += 'cpplint ok\n'
+    
+    restricted_includes = False
+    
+    s += '\n---- compile check ----\n'
+    C = subprocess.run(['g++','--std=gnu++14',program_name, '-o', program], stderr=subprocess.PIPE)
+    if C.returncode:
+        s += 'g++ found problems, as follows:'
+        s += C.stderr.decode()
+        return 'No compile',s
+    else:
+        s += 'pass\n'
+
+    s += '\n---- program check ----\n'
+    errors = check_program()
+
+    if errors:
+        s += 'errors found:\n'
+        for e in errors:
+            s += " " + e + "\n"
+    else:
+        s += 'pass\n'
+
+    if errors:
+        return 'Errors',s
+    elif P_lint.returncode or astyle_error:
+        return 'Lint found and/or style error',s
+    elif restricted_includes:
+        return "Restricted includes",s
+
+
+    return 'Pass',s
+
+
+if __name__ == '__main__':
+    summary,results = main()
+    print(results)
+    print('\nSummary:', summary)

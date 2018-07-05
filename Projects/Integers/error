@@ -1,0 +1,342 @@
+ Checking w7integer.h for EC327 submission.
+
+---- author check ----
+The authors are: joiemoie@bu.edu
+
+---- style check ----
+astyle ok (using options --style=google --indent=spaces=2)
+cpplint found problems, as follows:
+u748280w7integer.h:8:  public: should be indented +1 space inside class Integer  [whitespace/indent] [3]
+u748280w7integer.h:13:  If an else has a brace on one side, it should have it on both  [readability/braces] [5]
+u748280w7integer.h:19:  You don't need a ; after a }  [readability/braces] [4]
+u748280w7integer.h:26:  An else should appear on the same line as the preceding }  [whitespace/newline] [4]
+u748280w7integer.h:26:  If an else has a brace on one side, it should have it on both  [readability/braces] [5]
+u748280w7integer.h:32:  Missing space before ( in if(  [whitespace/parens] [5]
+u748280w7integer.h:34:  Missing spaces around !=  [whitespace/operators] [3]
+u748280w7integer.h:49:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:51:  An else should appear on the same line as the preceding }  [whitespace/newline] [4]
+u748280w7integer.h:51:  If an else has a brace on one side, it should have it on both  [readability/braces] [5]
+u748280w7integer.h:64:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:69:  Missing space before {  [whitespace/braces] [5]
+u748280w7integer.h:70:  Missing space before ( in for(  [whitespace/parens] [5]
+u748280w7integer.h:71:  Line ends in whitespace.  Consider deleting these extra spaces.  [whitespace/end_of_line] [4]
+u748280w7integer.h:73:  Weird number of spaces at line-start.  Are you using a 2-space indent?  [whitespace/indent] [3]
+u748280w7integer.h:85:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:90:  Missing space before {  [whitespace/braces] [5]
+u748280w7integer.h:92:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:99:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:104:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:111:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:112:  Should have a space between // and comment  [whitespace/comments] [4]
+u748280w7integer.h:116:  Should have a space between // and comment  [whitespace/comments] [4]
+u748280w7integer.h:120:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+u748280w7integer.h:122:  Should have a space between // and comment  [whitespace/comments] [4]
+u748280w7integer.h:124:  Line ends in whitespace.  Consider deleting these extra spaces.  [whitespace/end_of_line] [4]
+u748280w7integer.h:127:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:131:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+u748280w7integer.h:132:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+u748280w7integer.h:133:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+u748280w7integer.h:136:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+u748280w7integer.h:150:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:157:  Redundant blank line at the end of a code block should be deleted.  [whitespace/blank_line] [3]
+u748280w7integer.h:162:  Missing space after ,  [whitespace/comma] [3]
+u748280w7integer.h:177:  Missing spaces around =  [whitespace/operators] [4]
+u748280w7integer.h:179:  Missing spaces around =  [whitespace/operators] [4]
+u748280w7integer.h:180:  Lines should be <= 80 characters long  [whitespace/line_length] [2]
+u748280w7integer.h:181:  Line ends in whitespace.  Consider deleting these extra spaces.  [whitespace/end_of_line] [4]
+u748280w7integer.h:143:  Add #include <string> for string  [build/include_what_you_use] [4]
+u748280w7integer.h:186:  Could not find a newline character at the end of the file.  [whitespace/ending_newline] [5]
+Done processing u748280w7integer.h
+Total errors found: 40
+
+
+---- program check ----
+-----------------errors found--------------
+Failed: base programs
+ Program w7integer_combined.cpp crashed
+Command '['/media/sf_ec327_spring_website/w7integer_combined748280']' timed out after 3 seconds
+
+-------
+Failed: include guard test
+ g++ found problems, as follows:
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h:7:7: error: redefinition of ‘class Integer’
+ class Integer {
+       ^~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:7:7: error: previous definition of ‘class Integer’
+ class Integer {
+       ^~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘std::__cxx11::string padZeroes(std::__cxx11::string, int)’:
+u748280w7integer.h:37:8: error: redefinition of ‘std::__cxx11::string padZeroes(std::__cxx11::string, int)’
+ string padZeroes(string str, int numZeroes) {
+        ^~~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:37:8: note: ‘std::__cxx11::string padZeroes(std::__cxx11::string, int)’ previously defined here
+ string padZeroes(string str, int numZeroes) {
+        ^~~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘void MatchZeroes(std::__cxx11::string&, std::__cxx11::string&)’:
+u748280w7integer.h:46:6: error: redefinition of ‘void MatchZeroes(std::__cxx11::string&, std::__cxx11::string&)’
+ void MatchZeroes(string& string1, string& string2) {
+      ^~~~~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:46:6: note: ‘void MatchZeroes(std::__cxx11::string&, std::__cxx11::string&)’ previously defined here
+ void MatchZeroes(string& string1, string& string2) {
+      ^~~~~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘std::__cxx11::string positiveAdder(std::__cxx11::string, std::__cxx11::string)’:
+u748280w7integer.h:57:8: error: redefinition of ‘std::__cxx11::string positiveAdder(std::__cxx11::string, std::__cxx11::string)’
+ string positiveAdder(string string1, string string2) {
+        ^~~~~~~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:57:8: note: ‘std::__cxx11::string positiveAdder(std::__cxx11::string, std::__cxx11::string)’ previously defined here
+ string positiveAdder(string string1, string string2) {
+        ^~~~~~~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘std::__cxx11::string complement(std::__cxx11::string)’:
+u748280w7integer.h:69:8: error: redefinition of ‘std::__cxx11::string complement(std::__cxx11::string)’
+ string complement(string val){
+        ^~~~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:69:8: note: ‘std::__cxx11::string complement(std::__cxx11::string)’ previously defined here
+ string complement(string val){
+        ^~~~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘std::__cxx11::string fullAdder(std::__cxx11::string, bool, std::__cxx11::string, bool)’:
+u748280w7integer.h:81:8: error: redefinition of ‘std::__cxx11::string fullAdder(std::__cxx11::string, bool, std::__cxx11::string, bool)’
+ string fullAdder(string string1, bool neg1, string string2, bool neg2) {
+        ^~~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:81:8: note: ‘std::__cxx11::string fullAdder(std::__cxx11::string, bool, std::__cxx11::string, bool)’ previously defined here
+ string fullAdder(string string1, bool neg1, string string2, bool neg2) {
+        ^~~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator+(Integer, Integer)’:
+u748280w7integer.h:88:9: error: redefinition of ‘Integer operator+(Integer, Integer)’
+ Integer operator+(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:88:9: note: ‘Integer operator+(Integer, Integer)’ previously defined here
+ Integer operator+(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator-(Integer, Integer)’:
+u748280w7integer.h:97:9: error: redefinition of ‘Integer operator-(Integer, Integer)’
+ Integer operator-(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:97:9: note: ‘Integer operator-(Integer, Integer)’ previously defined here
+ Integer operator-(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator-(Integer)’:
+u748280w7integer.h:102:9: error: redefinition of ‘Integer operator-(Integer)’
+ Integer operator-(Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:102:9: note: ‘Integer operator-(Integer)’ previously defined here
+ Integer operator-(Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator*(Integer, Integer)’:
+u748280w7integer.h:107:9: error: redefinition of ‘Integer operator*(Integer, Integer)’
+ Integer operator*(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:107:9: note: ‘Integer operator*(Integer, Integer)’ previously defined here
+ Integer operator*(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘bool operator==(Integer, Integer)’:
+u748280w7integer.h:131:6: error: redefinition of ‘bool operator==(Integer, Integer)’
+ bool operator==(Integer int1, Integer int2) { return (int1-int2).digits == "0"; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:131:6: note: ‘bool operator==(Integer, Integer)’ previously defined here
+ bool operator==(Integer int1, Integer int2) { return (int1-int2).digits == "0"; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘bool operator!=(Integer, Integer)’:
+u748280w7integer.h:132:6: error: redefinition of ‘bool operator!=(Integer, Integer)’
+ bool operator!=(Integer int1, Integer int2) { return (int1-int2).digits != "0"; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:132:6: note: ‘bool operator!=(Integer, Integer)’ previously defined here
+ bool operator!=(Integer int1, Integer int2) { return (int1-int2).digits != "0"; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘bool operator>(Integer, Integer)’:
+u748280w7integer.h:133:6: error: redefinition of ‘bool operator>(Integer, Integer)’
+ bool operator>(Integer int1, Integer int2) { return !(int1-int2).neg && int1 != int2; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:133:6: note: ‘bool operator>(Integer, Integer)’ previously defined here
+ bool operator>(Integer int1, Integer int2) { return !(int1-int2).neg && int1 != int2; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘bool operator<(Integer, Integer)’:
+u748280w7integer.h:134:6: error: redefinition of ‘bool operator<(Integer, Integer)’
+ bool operator<(Integer int1, Integer int2) { return (int1-int2).neg; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:134:6: note: ‘bool operator<(Integer, Integer)’ previously defined here
+ bool operator<(Integer int1, Integer int2) { return (int1-int2).neg; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘bool operator>=(Integer, Integer)’:
+u748280w7integer.h:135:6: error: redefinition of ‘bool operator>=(Integer, Integer)’
+ bool operator>=(Integer int1, Integer int2) { return !(int1-int2).neg; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:135:6: note: ‘bool operator>=(Integer, Integer)’ previously defined here
+ bool operator>=(Integer int1, Integer int2) { return !(int1-int2).neg; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘bool operator<=(Integer, Integer)’:
+u748280w7integer.h:136:6: error: redefinition of ‘bool operator<=(Integer, Integer)’
+ bool operator<=(Integer int1, Integer int2) { return (int1-int2).neg || int1 == int2; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:136:6: note: ‘bool operator<=(Integer, Integer)’ previously defined here
+ bool operator<=(Integer int1, Integer int2) { return (int1-int2).neg || int1 == int2; }
+      ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer IntAbs(Integer)’:
+u748280w7integer.h:138:9: error: redefinition of ‘Integer IntAbs(Integer)’
+ Integer IntAbs(Integer int1) { return (int1.neg)?int1*(-1):int1; }
+         ^~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:138:9: note: ‘Integer IntAbs(Integer)’ previously defined here
+ Integer IntAbs(Integer int1) { return (int1.neg)?int1*(-1):int1; }
+         ^~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator/(Integer, Integer)’:
+u748280w7integer.h:140:9: error: redefinition of ‘Integer operator/(Integer, Integer)’
+ Integer operator/(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:140:9: note: ‘Integer operator/(Integer, Integer)’ previously defined here
+ Integer operator/(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator%(Integer, Integer)’:
+u748280w7integer.h:166:9: error: redefinition of ‘Integer operator%(Integer, Integer)’
+ Integer operator%(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:166:9: note: ‘Integer operator%(Integer, Integer)’ previously defined here
+ Integer operator%(Integer int1, Integer int2) {
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer& operator+=(Integer&, const Integer&)’:
+u748280w7integer.h:171:10: error: redefinition of ‘Integer& operator+=(Integer&, const Integer&)’
+ Integer& operator+=(Integer& int1, const Integer& int2) { int1 = int1 + int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:171:10: note: ‘Integer& operator+=(Integer&, const Integer&)’ previously defined here
+ Integer& operator+=(Integer& int1, const Integer& int2) { int1 = int1 + int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer& operator-=(Integer&, const Integer&)’:
+u748280w7integer.h:172:10: error: redefinition of ‘Integer& operator-=(Integer&, const Integer&)’
+ Integer& operator-=(Integer& int1, const Integer& int2) { int1 = int1 - int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:172:10: note: ‘Integer& operator-=(Integer&, const Integer&)’ previously defined here
+ Integer& operator-=(Integer& int1, const Integer& int2) { int1 = int1 - int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer& operator*=(Integer&, const Integer&)’:
+u748280w7integer.h:173:10: error: redefinition of ‘Integer& operator*=(Integer&, const Integer&)’
+ Integer& operator*=(Integer& int1, const Integer& int2) { int1 = int1 * int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:173:10: note: ‘Integer& operator*=(Integer&, const Integer&)’ previously defined here
+ Integer& operator*=(Integer& int1, const Integer& int2) { int1 = int1 * int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer& operator/=(Integer&, const Integer&)’:
+u748280w7integer.h:174:10: error: redefinition of ‘Integer& operator/=(Integer&, const Integer&)’
+ Integer& operator/=(Integer& int1, const Integer& int2) { int1 = int1 / int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:174:10: note: ‘Integer& operator/=(Integer&, const Integer&)’ previously defined here
+ Integer& operator/=(Integer& int1, const Integer& int2) { int1 = int1 / int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer& operator%=(Integer&, const Integer&)’:
+u748280w7integer.h:175:10: error: redefinition of ‘Integer& operator%=(Integer&, const Integer&)’
+ Integer& operator%=(Integer& int1, const Integer& int2) { int1 = int1 % int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:175:10: note: ‘Integer& operator%=(Integer&, const Integer&)’ previously defined here
+ Integer& operator%=(Integer& int1, const Integer& int2) { int1 = int1 % int2; }
+          ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator++(Integer&, int)’:
+u748280w7integer.h:176:9: error: redefinition of ‘Integer operator++(Integer&, int)’
+ Integer operator++(Integer& int1, const int) { int1+=1; return int1 - 1; }
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:176:9: note: ‘Integer operator++(Integer&, int)’ previously defined here
+ Integer operator++(Integer& int1, const int) { int1+=1; return int1 - 1; }
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator--(Integer&, int)’:
+u748280w7integer.h:177:9: error: redefinition of ‘Integer operator--(Integer&, int)’
+ Integer operator--(Integer& int1, const int) { int1-=1; return int1 + 1; }
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:177:9: note: ‘Integer operator--(Integer&, int)’ previously defined here
+ Integer operator--(Integer& int1, const int) { int1-=1; return int1 + 1; }
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator++(Integer&)’:
+u748280w7integer.h:178:9: error: redefinition of ‘Integer operator++(Integer&)’
+ Integer operator++(Integer& int1) { int1+=1; return int1; }
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:178:9: note: ‘Integer operator++(Integer&)’ previously defined here
+ Integer operator++(Integer& int1) { int1+=1; return int1; }
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘Integer operator--(Integer&)’:
+u748280w7integer.h:179:9: error: redefinition of ‘Integer operator--(Integer&)’
+ Integer operator--(Integer& int1) { int1-=1; return int1;}
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:179:9: note: ‘Integer operator--(Integer&)’ previously defined here
+ Integer operator--(Integer& int1) { int1-=1; return int1;}
+         ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘std::ostream& operator<<(std::ostream&, Integer)’:
+u748280w7integer.h:180:15: error: redefinition of ‘std::ostream& operator<<(std::ostream&, Integer)’
+ std::ostream& operator<<(std::ostream& os, Integer int1) { os << ((int1.neg)?"-":"") << int1.digits; return os;}
+               ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:180:15: note: ‘std::ostream& operator<<(std::ostream&, Integer)’ previously defined here
+ std::ostream& operator<<(std::ostream& os, Integer int1) { os << ((int1.neg)?"-":"") << int1.digits; return os;}
+               ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:3:0:
+u748280w7integer.h: In function ‘std::istream& operator>>(std::istream&, Integer)’:
+u748280w7integer.h:181:15: error: redefinition of ‘std::istream& operator>>(std::istream&, Integer)’
+ std::istream& operator>>(std::istream& is, Integer int1) {
+               ^~~~~~~~
+In file included from u748280w7integer_guards.cpp:2:0:
+u748280w7integer.h:181:15: note: ‘std::istream& operator>>(std::istream&, Integer)’ previously defined here
+ std::istream& operator>>(std::istream& is, Integer int1) {
+               ^~~~~~~~
+
+
+-------
+Failed: large number tests
+ Program w7integer_limits.cpp crashed
+Command '['/media/sf_ec327_spring_website/w7integer_limits748280']' timed out after 3 seconds
+ Program w7integer_limits.cpp crashed
+Command '['/media/sf_ec327_spring_website/w7integer_limits748280']' timed out after 3 seconds
+ Program w7integer_limits.cpp crashed
+Command '['/media/sf_ec327_spring_website/w7integer_limits748280']' timed out after 3 seconds
+
+-------

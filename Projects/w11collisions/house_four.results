@@ -1,0 +1,248 @@
+1 40
+0 0 100 100
+at 0
+one 20 22
+two 20 81
+three 80 23
+four 80 84
+
+at 1
+one 21 23
+two 21 80
+three 79 24
+four 79 83
+
+at 2
+one 22 24
+two 22 79
+three 78 25
+four 78 82
+
+at 3
+one 23 25
+two 23 78
+three 77 26
+four 77 81
+
+at 4
+one 24 26
+two 24 77
+three 76 27
+four 76 80
+
+at 5
+one 25 27
+two 25 76
+three 75 28
+four 75 79
+
+at 6
+one 26 28
+two 26 75
+three 74 29
+four 74 78
+
+at 7
+one 27 29
+two 27 74
+three 73 30
+four 73 77
+
+at 8
+one 28 30
+two 28 73
+three 72 31
+four 72 76
+
+at 9
+one 29 31
+two 29 72
+three 71 32
+four 71 75
+
+at 10
+one 30 32
+two 30 71
+three 70 33
+four 70 74
+
+at 11
+one 31 33
+two 31 70
+three 69 34
+four 69 73
+
+at 12
+one 32 34
+two 32 69
+three 68 35
+four 68 72
+
+at 13
+one 33 35
+two 33 68
+three 67 36
+four 67 71
+
+at 14
+one 34 36
+two 34 67
+three 66 37
+four 66 70
+
+at 15
+one 35 37
+two 35 66
+three 65 38
+four 65 69
+
+at 16
+one 36 38
+two 36 65
+three 64 39
+four 64 68
+
+at 17
+one 37 39
+two 37 64
+three 63 40
+four 63 67
+
+at 18
+one 38 40
+two 38 63
+three 62 41
+four 62 66
+
+at 19
+one 39 41
+two 39 62
+three 61 42
+four 61 65
+
+at 20
+one 40 42
+two 40 61
+three 60 43
+four 60 64
+
+at 21
+one 41 43
+two 41 60
+three 59 44
+four 59 63
+
+at 22
+one 42 44
+two 42 59
+three 58 45
+four 58 62
+
+at 23
+one 43 45
+two 43 58
+three 57 46
+four 57 61
+
+at 24
+one 44 46
+two 44 57
+three 56 47
+four 56 60
+
+at 25
+one 45 46
+two 45 57
+three 55 48
+four 55 59
+
+at 26
+one 44.7303 44.7057
+two 43.9009 57.609
+three 55.2312 48.4194
+four 56.1376 59.2659
+
+at 27
+one 44.2723 43.3677
+two 42.6079 58.182
+three 55.607 47.8868
+four 57.5127 60.5635
+
+at 28
+one 43.8143 42.0297
+two 41.315 58.755
+three 55.9828 47.3541
+four 58.8879 61.8612
+
+at 29
+one 43.3563 40.6917
+two 40.022 59.3279
+three 56.3586 46.8215
+four 60.263 63.1589
+
+at 30
+one 42.8983 39.3537
+two 38.729 59.9009
+three 56.7344 46.2888
+four 61.6382 64.4566
+
+at 31
+one 42.4403 38.0157
+two 37.4361 60.4738
+three 57.1102 45.7562
+four 63.0133 65.7543
+
+at 32
+one 41.9823 36.6777
+two 36.1431 61.0468
+three 57.486 45.2235
+four 64.3885 67.052
+
+at 33
+one 41.5243 35.3397
+two 34.8502 61.6197
+three 57.8618 44.6909
+four 65.7636 68.3497
+
+at 34
+one 41.0664 34.0017
+two 33.5572 62.1927
+three 58.2376 44.1582
+four 67.1388 69.6474
+
+at 35
+one 40.6084 32.6637
+two 32.2643 62.7656
+three 58.6134 43.6256
+four 68.5139 70.9451
+
+at 36
+one 40.1504 31.3257
+two 30.9713 63.3386
+three 58.9892 43.0929
+four 69.8891 72.2428
+
+at 37
+one 39.6924 29.9877
+two 29.6784 63.9115
+three 59.3651 42.5603
+four 71.2642 73.5405
+
+at 38
+one 39.2344 28.6497
+two 28.3854 64.4845
+three 59.7409 42.0276
+four 72.6394 74.8382
+
+at 39
+one 38.7764 27.3117
+two 27.0925 65.0574
+three 60.1167 41.4949
+four 74.0145 76.1359
+
+at 40
+one 38.3184 25.9737
+two 25.7995 65.6304
+three 60.4925 40.9623
+four 75.3897 77.4336
+

@@ -1,0 +1,44 @@
+10 40
+0 0 100 100
+0
+0
+at 0
+one 50 50
+two 10 10
+
+flag:0.5
+flag:0.5
+flag:3
+flag:-3
+-3
+oneUwall15
+3
+at 10
+one 70 80
+two 12 15
+
+flag:-3
+flag:-3
+-3
+oneRwall22.5
+-3
+at 20
+one 90 80
+two 24 20
+
+flag:-3
+flag:3
+3
+oneDwall45
+-3
+at 30
+one 80 50
+two 36 25
+
+3
+oneDwall45
+-3
+at 40
+one 60 20
+two 48 30
+
